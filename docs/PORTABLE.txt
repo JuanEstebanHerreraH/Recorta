@@ -1,0 +1,58 @@
+RECORTA - versión portable para Windows
+=======================================
+
+Quita el fondo de tus imágenes, corrige el borde y exporta PNG, WebP o JPG
+con el tamaño, los DPI y el peso correctos. La IA trabaja en esta computadora:
+sin cuentas, sin límites diarios y sin enviar tus imágenes a ningún lado.
+
+
+CÓMO SE USA
+-----------
+1. Descomprime este .zip donde quieras (Escritorio, Documentos, un pendrive).
+2. Abre Recorta.exe con doble clic. No hace falta instalar nada.
+3. Arrastra una imagen a la ventana, o usa "Elegir imagen".
+
+Si Windows muestra "Windows protegió su PC": pulsa "Más información" y luego
+"Ejecutar de todas formas". Aparece porque el programa no tiene firma digital
+(un certificado pago), no porque tenga un problema.
+
+
+REQUISITOS
+----------
+- Windows 10 u 11 de 64 bits.
+- WebView2 (el motor de Microsoft Edge). Ya viene con Windows 11 y con
+  Windows 10 actualizado. Si Recorta no abre, instala "WebView2 Runtime"
+  desde la página de Microsoft o usa el instalador de Recorta, que lo agrega solo.
+- Cualquier computadora sirve. La app mide tu equipo y elige un nivel:
+    Alto   tarjeta gráfica dedicada: el recorte más preciso.
+    Medio  gráfica integrada moderna.
+    Bajo   cualquier PC, aunque no tenga tarjeta gráfica compatible.
+  Se puede cambiar en el botón "Equipo" (arriba a la derecha).
+
+
+INTERNET
+--------
+- El modelo del nivel Bajo viene incluido: quitar fondos funciona sin
+  internet desde el primer uso.
+- Los modelos de los niveles Medio y Alto, la selección con un clic y el
+  agrandado con IA se descargan la primera vez que los usas (de 14 a 115 MB
+  cada uno) y quedan guardados. Después funcionan sin conexión.
+
+
+DÓNDE GUARDA SUS DATOS
+----------------------
+Recorta.exe no escribe nada en su propia carpeta. Las preferencias y los
+modelos descargados quedan en:
+
+    %LOCALAPPDATA%\app.recorta.escritorio\
+
+Para dejar la app como nueva (o liberar espacio), borra esa carpeta.
+Tus imágenes nunca se copian a ningún lado: solo se guardan donde tú elijas.
+
+
+MÁS INFORMACIÓN
+---------------
+Manual completo, código fuente y licencias: en el repositorio de GitHub
+del proyecto (carpeta docs/).
+Licencia del programa: MIT. Los modelos de IA tienen licencias propias
+(ver docs/LICENCIAS.md).

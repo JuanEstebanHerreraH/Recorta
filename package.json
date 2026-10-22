@@ -1,0 +1,45 @@
+{
+  "name": "recorta",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Recortador de imágenes gratis, portable y offline: quita fondos con IA local, refina bordes y exporta PNG con el tamaño, DPI y peso correctos.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -b",
+    "test": "vitest run",
+    "check": "npm run typecheck && npm run test && npm run build",
+    "models:download": "node scripts/download-models.mjs",
+    "icons": "tauri icon src-tauri/icono-app.png",
+    "desktop:dev": "tauri dev",
+    "desktop:build": "tauri build",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@fontsource-variable/atkinson-hyperlegible-next": "^5.3.0",
+    "@huggingface/transformers": "4.3.1",
+    "@jsquash/oxipng": "^2.3.0",
+    "fflate": "^0.8.3",
+    "image-q": "^4.0.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "zustand": "^5.0.15"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.12.2",
+    "@types/node": "^24.19.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "@webgpu/types": "^0.1.74",
+    "typescript": "~6.0.2",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.4"
+  }
+}

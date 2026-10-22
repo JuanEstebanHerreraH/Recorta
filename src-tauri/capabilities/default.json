@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Permisos de la ventana principal. La app no usa funciones nativas: solo lo básico de la ventana.",
+  "windows": ["main"],
+  "permissions": ["core:default"]
+}
