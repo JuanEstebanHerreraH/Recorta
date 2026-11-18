@@ -1,6 +1,10 @@
 # Recorta
 
-Quita el fondo de tus imágenes, corrige el borde a mano y exporta el PNG con el tamaño, los DPI y el peso que necesitas. Gratis y portable: la IA corre en tu computadora, sin cuentas ni límites diarios, y después de descargar el modelo una vez funciona sin conexión.
+**Elimina fondos, refina bordes y prepara imágenes para web o impresión con IA local.**
+
+[Descargar para Windows](https://github.com/JuanEstebanHerreraH/Recorta/releases/download/V1.0.0/Recorta_1.0.0_x64-setup.exe) · [Notas de la versión](https://github.com/JuanEstebanHerreraH/Recorta/releases/tag/V1.0.0) · [Guía de funciones](docs/FUNCIONES.md)
+
+La descarga publicada es el **instalador de Windows x64**. No necesitas Node.js ni Rust para usarlo. La IA procesa las imágenes en tu equipo; los modelos adicionales se descargan al utilizarlos por primera vez.
 
 ![Paso Calidad: a 20 cm y 300 DPI la app avisa que faltan píxeles y muestra el tamaño real sobre una base de corte junto a una hoja A4](docs/img/calidad.png)
 
@@ -16,6 +20,45 @@ El trabajo se ordena en cuatro pasos, siempre visibles a la derecha:
 Además: modo **Lote** para procesar muchas imágenes con los mismos ajustes, **historial** con cada paso nombrado (deshacer y volver a cualquier punto) y la imagen original intacta siempre.
 
 La lista completa de opciones, con qué hace cada una, está en [docs/FUNCIONES.md](docs/FUNCIONES.md).
+
+## Adaptación al equipo
+
+Al abrirse, la app revisa la tarjeta gráfica, el procesador y la memoria, y elige uno de tres niveles. Si un nivel falla durante el uso, baja al siguiente sola y te avisa.
+
+| Nivel | Equipo típico | Dónde corre la IA | Modelo para quitar el fondo |
+| --- | --- | --- | --- |
+| **Alto** | Tarjeta gráfica dedicada (NVIDIA, AMD Radeon RX, Intel Arc), 16 GB de RAM | Tarjeta gráfica | BiRefNet lite a 1024 px (~115 MB) |
+| **Medio** | Gráfica integrada moderna (Intel Iris Xe, Radeon integrada, Apple M), 8 GB | Tarjeta gráfica | BiRefNet lite a 512 px + afinado con la foto original (~99 MB) |
+| **Bajo** | Windows 10/11 de 64 bits, objetivo de 4 GB de RAM y sin WebGPU | Procesador | U²-Net liviano a 320 px (~5 MB) |
+
+Detalles, límites de cada nivel y cómo forzar uno: [docs/HARDWARE.md](docs/HARDWARE.md).
+
+## Decisión de implementación
+
+La app separa el editor del procesamiento de IA y adapta el modelo al equipo. La ruta CPU permite utilizarla sin WebGPU; los modelos de mayor resolución pueden mejorar el borde, pero requieren más recursos. El tamaño impreso y los DPI se muestran antes de exportar para hacer visible cuándo faltan píxeles.
+
+## App de escritorio (Windows)
+
+La versión publicada usa Tauri y se descarga desde [Releases](https://github.com/JuanEstebanHerreraH/Recorta/releases/tag/V1.0.0). El instalador disponible es `Recorta_1.0.0_x64-setup.exe`. No se anuncia una descarga portable que no esté adjunta a la versión.
+
+Para compilarla desde el código, consulta [la guía de GitHub y distribución](docs/GITHUB.md) y ejecuta `npm run desktop:build` con los requisitos de Tauri instalados. La versión web puede ejecutarse localmente con los comandos de desarrollo.
+
+## Privacidad y variables de entorno
+
+- Las imágenes nunca salen de la computadora. Lo único que se descarga de internet son los modelos de IA, una sola vez, desde Hugging Face.
+- La configuración opcional va en un archivo `.env` (copia `.env.example`). El `.env` **no se sube** a GitHub: lo impide `.gitignore`.
+- Todo lo que empieza con `VITE_` queda dentro de la app compilada y cualquiera puede leerlo. No guardes contraseñas ni claves ahí. Recorta no necesita ninguna.
+
+## Limitaciones conocidas
+
+- La precisión del recorte depende del nivel: en computadoras sin tarjeta gráfica compatible el modelo es liviano y el borde sale menos fino. Para logos e ilustraciones, *Quitar el color de los bordes* da mejores bordes en cualquier equipo.
+- En GitHub Pages la IA en procesador usa un solo hilo (GitHub no permite las cabeceras necesarias); en la app de escritorio no pasa.
+- El `.exe` no está firmado: Windows muestra un aviso la primera vez ([qué hacer](docs/SOLUCION-DE-PROBLEMAS.md#app-de-escritorio-windows)).
+- Probado en navegadores basados en Chromium (Chrome, Edge y el motor de la app de escritorio). Firefox y Safari deberían funcionar, con menos pruebas.
+- No abre fotos HEIC de iPhone: hay que exportarlas antes como JPG.
+
+<details>
+<summary><strong>Desarrollo, estructura y documentación</strong></summary>
 
 ## Empezar
 
@@ -38,46 +81,6 @@ Abre <http://localhost:5173> en Chrome o Edge. La primera vez que uses la IA se 
 | `npm run desktop:build` | Crear la app de escritorio (necesita Rust; ver abajo). |
 
 Todos los comandos, explicados uno por uno: [docs/COMANDOS.md](docs/COMANDOS.md).
-
-## Funciona en computadoras viejas
-
-Al abrirse, la app revisa la tarjeta gráfica, el procesador y la memoria, y elige uno de tres niveles. Si un nivel falla durante el uso, baja al siguiente sola y te avisa.
-
-| Nivel | Equipo típico | Dónde corre la IA | Modelo para quitar el fondo |
-| --- | --- | --- | --- |
-| **Alto** | Tarjeta gráfica dedicada (NVIDIA, AMD Radeon RX, Intel Arc), 16 GB de RAM | Tarjeta gráfica | BiRefNet lite a 1024 px (~115 MB) |
-| **Medio** | Gráfica integrada moderna (Intel Iris Xe, Radeon integrada, Apple M), 8 GB | Tarjeta gráfica | BiRefNet lite a 512 px + afinado con la foto original (~99 MB) |
-| **Bajo** | Cualquier PC con Windows 10/11 de 64 bits y 4 GB, aunque no tenga WebGPU | Procesador | U²-Net liviano a 320 px (~5 MB) |
-
-Detalles, límites de cada nivel y cómo forzar uno: [docs/HARDWARE.md](docs/HARDWARE.md).
-
-## App de escritorio portable (Windows)
-
-La misma app empaquetada con [Tauri](https://tauri.app): un solo `.exe` que no necesita instalación y trae incluido el modelo del nivel Bajo, así que quita fondos sin internet desde el primer uso. No hace falta que instales Rust: GitHub la compila por ti.
-
-1. Sube el proyecto a GitHub ([guía paso a paso](docs/GITHUB.md)).
-2. Pestaña **Actions** → **App de escritorio** → **Run workflow**.
-3. Al terminar (entre 10 y 20 minutos la primera vez), descarga `recorta-windows` desde esa misma ejecución: trae el `.zip` portable y el instalador.
-
-Si creas una etiqueta de versión (`git tag v1.0.0` y `git push --tags`), los archivos además quedan publicados en la sección **Releases**.
-
-## Versión web en GitHub Pages
-
-Cada cambio que subes a `main` se publica en `https://<tu-usuario>.github.io/<repositorio>/`. Hay que activarlo una vez: **Settings → Pages → Source: GitHub Actions**. Ver [docs/GITHUB.md](docs/GITHUB.md).
-
-## Privacidad y variables de entorno
-
-- Las imágenes nunca salen de la computadora. Lo único que se descarga de internet son los modelos de IA, una sola vez, desde Hugging Face.
-- La configuración opcional va en un archivo `.env` (copia `.env.example`). El `.env` **no se sube** a GitHub: lo impide `.gitignore`.
-- Todo lo que empieza con `VITE_` queda dentro de la app compilada y cualquiera puede leerlo. No guardes contraseñas ni claves ahí. Recorta no necesita ninguna.
-
-## Limitaciones conocidas
-
-- La precisión del recorte depende del nivel: en computadoras sin tarjeta gráfica compatible el modelo es liviano y el borde sale menos fino. Para logos e ilustraciones, *Quitar el color de los bordes* da mejores bordes en cualquier equipo.
-- En GitHub Pages la IA en procesador usa un solo hilo (GitHub no permite las cabeceras necesarias); en la app de escritorio no pasa.
-- El `.exe` no está firmado: Windows muestra un aviso la primera vez ([qué hacer](docs/SOLUCION-DE-PROBLEMAS.md#app-de-escritorio-windows)).
-- Probado en navegadores basados en Chromium (Chrome, Edge y el motor de la app de escritorio). Firefox y Safari deberían funcionar, con menos pruebas.
-- No abre fotos HEIC de iPhone: hay que exportarlas antes como JPG.
 
 ## Estructura
 
@@ -116,3 +119,5 @@ Cómo encaja cada parte y dónde tocar para cambiar algo: [docs/ARQUITECTURA.md]
 ## Licencia
 
 Código bajo licencia [MIT](LICENSE). Los modelos de IA tienen licencias propias; antes de un uso comercial lee [docs/LICENCIAS.md](docs/LICENCIAS.md).
+
+</details>
