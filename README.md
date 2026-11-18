@@ -39,7 +39,7 @@ La app separa el editor del procesamiento de IA y adapta el modelo al equipo. La
 
 ## App de escritorio (Windows)
 
-La versión publicada usa Tauri y se descarga desde [Releases](https://github.com/JuanEstebanHerreraH/Recorta/releases/tag/V1.0.0). El instalador disponible es `Recorta_1.0.0_x64-setup.exe`. No se anuncia una descarga portable que no esté adjunta a la versión.
+La versión publicada usa Tauri y se descarga desde [Releases](https://github.com/JuanEstebanHerreraH/Recorta/releases/tag/V1.0.0). El instalador disponible es `Recorta_1.0.0_x64-setup.exe`.
 
 Para compilarla desde el código, consulta [la guía de GitHub y distribución](docs/GITHUB.md) y ejecuta `npm run desktop:build` con los requisitos de Tauri instalados. La versión web puede ejecutarse localmente con los comandos de desarrollo.
 
